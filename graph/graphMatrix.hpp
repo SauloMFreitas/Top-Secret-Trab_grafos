@@ -7,34 +7,43 @@
 
 using namespace std;
 
+// Definição da classe MatrixGraph, que herda de Graph::Graph
 class MatrixGraph : public Graph::Graph {
   private:
-    map<string, uint> nameMap;
-    vector<vector<uint>> matrix;
+    map<string, uint> nameMap;      // Mapeia os nomes dos vértices para seus índices na matriz
+    vector<vector<uint>> matrix;    // Representa a matriz de adjacência do grafo
 
-    bool _hasEdge(const string &from, const string &to);
+    bool _has_edge(const string &from, const string &to);
 
   public:
+    //-----CONSTRUTORES-----//
+    // PADRÃO
     MatrixGraph();
+
+    // PARAMETRIZADO (tamanho, direcionamento)
     MatrixGraph(const uint &_size, const bool &_directed);
+
+    // PARAMETRIZADO (tamanho, direcionamento, nome de vértices)
     MatrixGraph(const uint &_size, const bool &_directed, const vector<string> &names);
 
-    // Data
+    //-----DATA-----//
     /* uint getEdgeCount(){}; */
 
-    // Edge
-    bool viableEdge(const string &from, const string &to) override;
-    bool hasEdge(const string &from, const string &to) override;
-    bool addEdge(const string &from, const string &to, const uint &weight) override;
-    bool removeEdge(const string &from, const string &to) override;
+    //-----EDGE-----//
+    // viabilidade, existência, adição e remoção de arestas
+    bool viable_edge(const string &from, const string &to) override;
+    bool has_edge(const string &from, const string &to) override;
+    bool add_edge(const string &from, const string &to, const uint &weight) override;
+    bool remove_edge(const string &from, const string &to) override;
 
-    // Vertex
-    bool hasVertex(const string &vertexName) override;
-    void addVertex(const uint &newVertexCount) override;
-    bool addVertex(const uint &newVertexCount, const vector<string> &vertexNames) override;
-    bool removeVertex(const string &vertexName) override;
+    //-----VERTEX-----//
+    // existência, adição e remoção de vértices
+    bool has_vertex(const string &vertexName) override;
+    void add_vertex(const uint &newVertexCount) override;
+    bool add_vertex(const uint &newVertexCount, const vector<string> &vertexNames) override;
+    bool remove_vertex(const string &vertexName) override;
 
-    // Debug
+    //-----DEBUG-----//
     void print() override;
 
     /* vector<string> dijkstra(const string &start);
@@ -51,10 +60,11 @@ class MatrixGraph : public Graph::Graph {
     Graph *getSubgraph(const vector<string> &vertices); */
 };
 
-// Constructor
-
+//-----CONSTRUTORES-----//
+// PADRÃO
 inline MatrixGraph::MatrixGraph() : Graph() {}
 
+// PARAMETRIZADO (tamanho, direcionamento)
 inline MatrixGraph::MatrixGraph(const uint &_size, const bool &_directed) : Graph(_size, _directed, false) {
     matrix = vector<vector<uint>>(_size, vector<uint>(_size, 0));
 
@@ -64,6 +74,7 @@ inline MatrixGraph::MatrixGraph(const uint &_size, const bool &_directed) : Grap
     }
 }
 
+// PARAMETRIZADO (tamanho, direcionamento, nome de vértices)
 inline MatrixGraph::MatrixGraph(const uint &_size, const bool &_directed, const vector<string> &names) : Graph(_size, _directed, false) {
     if (names.size() != _size) {
         throw invalid_argument("Number of names must match the size of the graph");
@@ -75,22 +86,21 @@ inline MatrixGraph::MatrixGraph(const uint &_size, const bool &_directed, const 
     }
 }
 
-// Edge
-
-inline bool MatrixGraph::viableEdge(const string &from, const string &to) {
-    return hasVertex(from) && hasVertex(to);
+//-----EDGE-----//
+inline bool MatrixGraph::viable_edge(const string &from, const string &to) {
+    return has_vertex(from) && has_vertex(to);
 }
 
-inline bool MatrixGraph::hasEdge(const string &from, const string &to) {
-    return viableEdge(from, to) ? matrix[nameMap[from]][nameMap[to]] : false;
+inline bool MatrixGraph::has_edge(const string &from, const string &to) {
+    return viable_edge(from, to) ? matrix[nameMap[from]][nameMap[to]] : false;
 }
 
-inline bool MatrixGraph::_hasEdge(const string &from, const string &to) {
+inline bool MatrixGraph::_has_edge(const string &from, const string &to) {
     return matrix[nameMap[from]][nameMap[to]];
 }
 
-inline bool MatrixGraph::addEdge(const string &from, const string &to, const uint &weight = 1) {
-    if (viableEdge(from, to) && !_hasEdge(from, to)) {
+inline bool MatrixGraph::add_edge(const string &from, const string &to, const uint &weight = 1) {
+    if (viable_edge(from, to) && !_has_edge(from, to)) {
         matrix[nameMap[from]][nameMap[to]] = weight;
         if (!directed) {
             matrix[nameMap[to]][nameMap[from]] = weight;
@@ -100,8 +110,8 @@ inline bool MatrixGraph::addEdge(const string &from, const string &to, const uin
     return false;
 }
 
-inline bool MatrixGraph::removeEdge(const string &from, const string &to) {
-    if (hasEdge(from, to)) {
+inline bool MatrixGraph::remove_edge(const string &from, const string &to) {
+    if (has_edge(from, to)) {
         matrix[nameMap[from]][nameMap[to]] = 0;
         if (!directed) {
             matrix[nameMap[to]][nameMap[from]] = 0;
@@ -111,13 +121,12 @@ inline bool MatrixGraph::removeEdge(const string &from, const string &to) {
     return false;
 }
 
-// Vertex
-
-inline bool MatrixGraph::hasVertex(const string &vertexName) {
+//-----VERTEX-----//
+inline bool MatrixGraph::has_vertex(const string &vertexName) {
     return nameMap.find(vertexName) != nameMap.end();
 }
 
-inline void MatrixGraph::addVertex(const uint &newVertexCount) {
+inline void MatrixGraph::add_vertex(const uint &newVertexCount) {
     matrix.insert(matrix.end(), newVertexCount, vector<uint>(matrix.size(), 0));
 
     for (auto &row : matrix) {
@@ -132,13 +141,13 @@ inline void MatrixGraph::addVertex(const uint &newVertexCount) {
     size += newVertexCount;
 }
 
-inline bool MatrixGraph::addVertex(const uint &newVertexCount, const vector<string> &vertexNames) {
+inline bool MatrixGraph::add_vertex(const uint &newVertexCount, const vector<string> &vertexNames) {
     if (vertexNames.size() != newVertexCount) {
         throw invalid_argument("Number of vertexNames must match the size of newVertexCount");
     }
 
     for (auto &name : vertexNames) {
-        if (hasVertex(name)) {
+        if (has_vertex(name)) {
             return false;
         }
     }
@@ -158,8 +167,8 @@ inline bool MatrixGraph::addVertex(const uint &newVertexCount, const vector<stri
     return true;
 }
 
-inline bool MatrixGraph::removeVertex(const string &vertexName) {
-    if (hasVertex(vertexName)) {
+inline bool MatrixGraph::remove_vertex(const string &vertexName) {
+    if (has_vertex(vertexName)) {
         uint index = nameMap[vertexName];
         matrix.erase(matrix.begin() + index);
 
@@ -175,6 +184,7 @@ inline bool MatrixGraph::removeVertex(const string &vertexName) {
     return false;
 }
 
+//-----DEBUG-----//
 inline void MatrixGraph::print() {
     vector<pair<uint, string>> value_name;
     value_name.reserve(size);

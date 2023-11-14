@@ -8,31 +8,40 @@
 
 using namespace std;
 
+// Definição da classe AdjListGraph, que herda de Graph::Graph
 class AdjListGraph : public Graph::Graph {
   private:
-    map<string, list<tuple<string, int>>> adjList;
+    map<string, list<tuple<string, int>>> adjList;  // Lista de adjacência para representar o grafo
 
   public:
+    //-----CONSTRUTORES-----//
+    // PADRÃO
     AdjListGraph();
+
+    // PARAMETRIZADO (tamanho, direcionamento)
     AdjListGraph(const uint &_size, const bool &_directed);
+
+    // PARAMETRIZADO (tamanho, direcionamento, nomes de vértices)
     AdjListGraph(const uint &_size, const bool &_directed, const vector<string> &names);
 
-    // Data
+    //-----DATA-----//
     /* uint getEdgeCount(){}; */
 
-    // Edge
-    bool viableEdge(const string &from, const string &to) override;
-    bool hasEdge(const string &from, const string &to) override;
-    bool addEdge(const string &from, const string &to, const uint &weight) override;
-    bool removeEdge(const string &from, const string &to) override;
+    //-----EDGE-----//
+    // viabilidade, existência, adição e remoção de arestas
+    bool viable_edge(const string &from, const string &to) override;
+    bool has_edge(const string &from, const string &to) override;
+    bool add_edge(const string &from, const string &to, const uint &weight) override;
+    bool remove_edge(const string &from, const string &to) override;
 
-    // Vertex
-    bool hasVertex(const string &vertexName) override;
-    void addVertex(const uint &newVertexCount) override;
-    bool addVertex(const uint &newVertexCount, const vector<string> &vertexNames) override;
-    bool removeVertex(const string &vertexName) override;
+    //-----VERTEX-----//
+    // existência, adição e remoção de vértices
+    bool has_vertex(const string &vertexName) override;
+    void add_vertex(const uint &newVertexCount) override;
+    bool add_vertex(const uint &newVertexCount, const vector<string> &vertexNames) override;
+    bool remove_vertex(const string &vertexName) override;
 
-    // Debug
+    //-----DEBUG-----//
     void print() override;
 
     /* vector<string> dijkstra(const string &start);
@@ -49,8 +58,11 @@ class AdjListGraph : public Graph::Graph {
     Graph *getSubgraph(const vector<string> &vertices); */
 };
 
+//-----CONSTRUTORES-----//
+// PADRÃO
 inline AdjListGraph::AdjListGraph() : Graph() {}
 
+// PARAMETRIZADO (tamanho, direcionamento)
 inline AdjListGraph::AdjListGraph(const uint &_size, const bool &_directed) : Graph(_size, _directed, false) {
     for (uint i = 0; i < size; ++i) {
         string key(1, static_cast<char>('A' + i));
@@ -58,6 +70,7 @@ inline AdjListGraph::AdjListGraph(const uint &_size, const bool &_directed) : Gr
     }
 }
 
+// PARAMETRIZADO (tamanho, direcionamento, nomes de vértices)
 inline AdjListGraph::AdjListGraph(const uint &_size, const bool &_directed, const vector<string> &names) : Graph(_size, _directed, false) {
     if (names.size() != _size) {
         throw invalid_argument("Number of names must match the size of the graph");
@@ -68,13 +81,13 @@ inline AdjListGraph::AdjListGraph(const uint &_size, const bool &_directed, cons
     }
 }
 
-// Edge
-inline bool AdjListGraph::viableEdge(const string &from, const string &to) {
-    return hasVertex(from) && hasVertex(to);
+//-----EDGE-----//
+inline bool AdjListGraph::viable_edge(const string &from, const string &to) {
+    return has_vertex(from) && has_vertex(to);
 }
 
-inline bool AdjListGraph::hasEdge(const string &from, const string &to) {
-    if (!viableEdge(from, to)) {
+inline bool AdjListGraph::has_edge(const string &from, const string &to) {
+    if (!viable_edge(from, to)) {
         return false;
     }
 
@@ -84,8 +97,8 @@ inline bool AdjListGraph::hasEdge(const string &from, const string &to) {
     return it != adjList[from].end();
 }
 
-inline bool AdjListGraph::addEdge(const string &from, const string &to, const uint &weight) {
-    if (viableEdge(from, to) && !hasEdge(from, to)) {
+inline bool AdjListGraph::add_edge(const string &from, const string &to, const uint &weight) {
+    if (viable_edge(from, to) && !has_edge(from, to)) {
         adjList[from].push_back(make_tuple(to, weight));
         if (!directed) {
             adjList[to].push_back(make_tuple(from, weight));
@@ -95,8 +108,8 @@ inline bool AdjListGraph::addEdge(const string &from, const string &to, const ui
     return false;
 }
 
-inline bool AdjListGraph::removeEdge(const string &from, const string &to) {
-    if (hasEdge(from, to)) {
+inline bool AdjListGraph::remove_edge(const string &from, const string &to) {
+    if (has_edge(from, to)) {
         for (auto it = adjList[from].begin(); it != adjList[from].end(); ++it) {
             if (get<0>(*it) == to) {
                 adjList[from].erase(it);
@@ -108,12 +121,12 @@ inline bool AdjListGraph::removeEdge(const string &from, const string &to) {
     return false;
 }
 
-// Vertex
-inline bool AdjListGraph::hasVertex(const string &vertexName) {
+//-----VERTEX-----//
+inline bool AdjListGraph::has_vertex(const string &vertexName) {
     return adjList.find(vertexName) != adjList.end();
 }
 
-inline void AdjListGraph::addVertex(const uint &newVertexCount) {
+inline void AdjListGraph::add_vertex(const uint &newVertexCount) {
     for (uint i = size; i < size + newVertexCount; i++) {
         string key(1, static_cast<char>('A' + i));
         adjList[key] = list<tuple<string, int>>();
@@ -122,13 +135,13 @@ inline void AdjListGraph::addVertex(const uint &newVertexCount) {
     size += newVertexCount;
 }
 
-inline bool AdjListGraph::addVertex(const uint &newVertexCount, const vector<string> &vertexNames) {
+inline bool AdjListGraph::add_vertex(const uint &newVertexCount, const vector<string> &vertexNames) {
     if (vertexNames.size() != newVertexCount) {
         throw invalid_argument("Number of vertexNames must match the size of newVertexCount");
     }
 
     for (auto &name : vertexNames) {
-        if (hasVertex(name)) {
+        if (has_vertex(name)) {
             return false;
         }
     }
@@ -142,7 +155,9 @@ inline bool AdjListGraph::addVertex(const uint &newVertexCount, const vector<str
     return true;
 }
 
-// Debug
+inline bool AdjListGraph::remove_vertex(const string &vertexName) {}
+
+//-----DEBUG-----//
 inline void AdjListGraph::print() {
     for (auto &[key, edges] : adjList) {
         cout << key << ": ";
@@ -161,5 +176,3 @@ inline void AdjListGraph::print() {
 
     cout << endl;
 }
-
-inline bool AdjListGraph::removeVertex(const string &vertexName) {}
