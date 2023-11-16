@@ -59,6 +59,11 @@ class Graph {
     // remove_vertex REMOVE um vértice específico do grafo
     virtual bool remove_vertex(const string &vertexName) = 0;
 
+    //-----OTHER FUNCTIONS-----//
+
+    virtual bool isCyclicUtil(string v, map<string, bool> &visited, string parent) = 0;
+    virtual bool isCyclic() = 0;
+
     //-----IMPRESSÃO E DEBUG-----//
     // print PRINTA grafo (método virtual puro, deve ser implementado nas classes derivadas)
     virtual void print() = 0;

@@ -41,6 +41,10 @@ class AdjListGraph : public Graph::Graph {
     bool add_vertex(const uint &newVertexCount, const vector<string> &vertexNames) override;
     bool remove_vertex(const string &vertexName) override;
 
+    //-----OTHER FUNCTIONS-----//
+    bool isCyclicUtil() override;
+    bool isCyclic() override;
+
     //-----DEBUG-----//
     void print() override;
 
@@ -158,6 +162,43 @@ inline bool AdjListGraph::add_vertex(const uint &newVertexCount, const vector<st
 
 inline bool AdjListGraph::remove_vertex(const string &vertexName) {}
 
+
+//-----OTHER FUNCTIONS-----//
+    bool isCyclicUtil(string v, map<string, bool> &visited, string parent) {
+        visited[v] = true;
+
+        for (auto i : adjList[v]) {
+            string adjVertex = get<0>(i);
+
+            if (!visited[adjVertex]) {
+                if (isCyclicUtil(adjVertex, visited, v)) {
+                    return true;
+                }
+            }
+            else if (adjVertex != parent) {
+                // Encontrado um vértice visitado que não é pai, ciclo detectado
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool isCyclic() {
+        map<string, bool> visited;
+
+        for (auto i : adjList) {
+            if (!visited[i.first]) {
+                if (isCyclicUtil(i.first, visited, "")) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    
 //-----DEBUG-----//
 inline void AdjListGraph::print() {
     for (auto &[key, edges] : adjList) {
