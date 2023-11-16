@@ -55,7 +55,8 @@ class AdjListGraph : public Graph::Graph {
     uint maxFlow(const string &source, const string &sink);
     void invert();
     void transpose();
-    Graph *getSubgraph(const vector<string> &vertices); */
+    Graph *getSubgraph(const vector<string> &vertices); 
+    */
 };
 
 //-----CONSTRUTORES-----//
