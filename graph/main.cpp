@@ -25,9 +25,12 @@ int main() {
     cout << endl;
 
     cout << "--------------------------------"<< endl;
-    g.contract(gc);
+    GraphMatrix cg = g;
+    cg.contract(gc);
 
     g.print();
+    cout << "--------------------------------"<< endl;
+    cg.print();
 
     return 0;
 }

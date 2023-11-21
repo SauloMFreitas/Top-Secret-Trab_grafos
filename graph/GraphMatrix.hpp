@@ -70,7 +70,7 @@ inline bool GraphMatrix::dfs(int v, vector<bool>& visitado, vector<bool>& pilhaR
 // ------ CONSTRUCTORS ----- //
 inline GraphMatrix::GraphMatrix(int numVertices){
     this->numVertices = numVertices;
-    adjMatrix.resize(numVertices, std::vector<int>(numVertices, INT_MAX));
+    adjMatrix.resize(numVertices, vector<int>(numVertices, INT_MAX));
 }
 
 // ------ EDGES ------//
@@ -105,7 +105,7 @@ inline bool GraphMatrix::remove_edge(const int &from, const int &to) {
 // ------ VERTEX ------ //
 
 inline bool GraphMatrix::has_vertex(const int &vertex) {
-    return vertex > 0 && vertex < numVertices;
+    return vertex >= 0 && vertex < numVertices;
 }
 
 inline void GraphMatrix::add_vertex(const int &newVertexCount) {
@@ -162,28 +162,50 @@ inline vector<int> GraphMatrix::findCycles(){
 
 
 inline void GraphMatrix::contract(const vector<int>& ciclo){
-    if (ciclo.size() < 2) return; // Necessário pelo menos 2 vértices para formar um ciclo
-
-    int inicio = ciclo.front();
-    int fim = ciclo.back();
-    int pesoNovo = 0;
-
-    // Removendo as arestas do ciclo e calculando o peso total
-    for (size_t i = 0; i < ciclo.size() - 1; ++i) {
-        pesoNovo += adjMatrix[ciclo[i]][ciclo[i + 1]];
-        adjMatrix[ciclo[i]][ciclo[i + 1]] = INT_MAX;
+    
+    if (ciclo.empty())
+    {
+        return;
+    }
+    
+    // Criando super-vértice
+    int superVertice = numVertices++;
+    adjMatrix.resize(numVertices, vector<int>(numVertices, INT_MAX));
+    for (auto& row : adjMatrix) {
+        row.resize(numVertices, INT_MAX);
     }
 
-    // Adicionando a nova aresta com o peso total do ciclo
-    adjMatrix[inicio][fim] = pesoNovo;
+    // Redirecionando arestas de/para o ciclo para o super-vértice
+    for (int i = 0; i < numVertices; ++i) {
+        for (int v : ciclo) {
+            if (i != superVertice && adjMatrix[i][v] != INT_MAX) {
+                adjMatrix[i][superVertice] = adjMatrix[i][v];
+                adjMatrix[i][v] = INT_MAX;
+            }
+            if (i != superVertice && adjMatrix[v][i] != INT_MAX) {
+                adjMatrix[superVertice][i] = adjMatrix[v][i];
+                adjMatrix[v][i] = INT_MAX;
+            }
+        }
+    }
 
-    // Ajuste das conexões com outros vértices, se necessário
-    // ...
+    // Removendo as arestas internas do ciclo
+    for (int i = (int)ciclo.size()-2; i >= 0 ; --i) {
+        remove_vertex(ciclo.at(i));
+    }
+    cout << endl;
 }
 
 // ------ DEBUG ------ //
 inline void GraphMatrix::print(){
+    cout << "  ";
+    for (int i = 0; i < numVertices; i++)
+    {
+        cout << i << " ";
+    }
+    cout << endl;
     for (int i = 0; i < numVertices; ++i) {
+        cout << i << " ";
         for (int j = 0; j < numVertices; ++j) {
             if (adjMatrix[i][j] == INT_MAX)
                 cout << "0 ";
