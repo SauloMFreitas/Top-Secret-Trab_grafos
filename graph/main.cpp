@@ -1,18 +1,33 @@
-#include "DAG.hpp"
+#include "GraphList.hpp"
+#include "GraphMatrix.hpp"
+#include <iostream>
+#include <vector>
+#include <utility> // para pair
+using namespace std;
+
 int main() {
-    DAG *grafo = new DAG(4);
 
-    grafo->add_edge(0, 1, 1);
-    grafo->add_edge(0, 2, 3);
-    grafo->add_edge(1, 2, 1);
-    grafo->add_edge(2, 3, 1);
+    cout << "------ Matriz de adjacencia ------ " << endl;
+    GraphMatrix g(4);
 
-    grafo->print();
+    g.add_edge(0,1,1);
+    g.add_edge(1,2,1);
+    g.add_edge(2,3,1);
+    g.add_edge(3,1,1);
+    
+    g.print();
 
-    if (grafo->temCiclo())
-        std::cout << "O grafo tem pelo menos um ciclo.\n";
-    else
-        std::cout << "O grafo não tem ciclo.\n";
+    vector<int> gc = g.findCycles();
+    cout << "--------------------------------"<< endl;
+    for(int i : gc){
+        cout << i << " ";
+    }
+    cout << endl;
+
+    cout << "--------------------------------"<< endl;
+    g.contract(gc);
+
+    g.print();
 
     return 0;
 }
