@@ -25,6 +25,6 @@ int main() {
     // cout << "---------------- aaa ----------------"<< endl;
     // GraphMatrix cg = g;
     g.edmonds_algorithm(0);
-    //g.print();
+    g.print();
     return 0;
 }

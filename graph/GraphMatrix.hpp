@@ -277,8 +277,8 @@ inline void GraphMatrix::contract_cycle(vector<int>& cycle) {
     
 
     // Removendo arestas internas do ciclo
-    for (int i = 0; i < cycle.size(); ++i) {
-        for (int j = 0; j < cycle.size(); ++j) {
+    for (int i = 0; i < (int)cycle.size(); ++i) {
+        for (int j = 0; j < (int)cycle.size(); ++j) {
             adjMatrix[cycle[i]][cycle[j]].score = INT_MAX;
         }
     }
@@ -288,8 +288,10 @@ inline void GraphMatrix::contract_cycle(vector<int>& cycle) {
 inline vector<int> GraphMatrix::findCycles() {
     vector<vector<int>> graph;
     graph.resize(numVertices);
+    cout << "aa"<<endl;
     for (const auto& edge : BestInEdge) {
-        if (edge.source >= 0 && edge.target >= 0)
+        cout << edge.source << " " << edge.target  << " " << edge.score << endl;
+        if (edge.source >= 0 && edge.target >= 0 && adjMatrix[edge.source][edge.target].score != INT_MAX)
         {
             graph[edge.target].push_back(edge.source);
         }
