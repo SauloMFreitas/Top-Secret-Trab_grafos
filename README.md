@@ -4,12 +4,10 @@
 Para rodar o programa atualmente basta executar o comando 'make' ou 'mingw32-make'
 
 ## Compilador
-Compilador padrao = clang++
-
+Compilador padrao = clang++  
 Caso precise mudar basta acessar o Makefile e alterar a primeira linha para 'CXX = g++'
 
-Seria bom ser capaz de automatizar o reconhecimento da existencia do compilador...
-
+Seria bom ser capaz de automatizar o reconhecimento da existencia do compilador...  
 mas eu não sei fazer isso, porque o comando é diferente no windows e no linux, então tem uma certa complexidade
 
 ## Todo
@@ -22,7 +20,7 @@ mas eu não sei fazer isso, porque o comando é diferente no windows e no linux,
 4 > Gerar grafos automaticamente com o comando -generate -vertex=? -edges=? -out=?
 
 ### Exemplos
-./Graphy -in=a.txt
+./Graphy -in=a.txt  
 (automaticamente ele vai criar um arquivo chamado a_.txt)
 
 ./Graphy -in=a.txt -out=b.txt
