@@ -2,7 +2,6 @@
 
 ## Como rodar
 Para rodar o programa atualmente basta executar o comando 'make' ou 'mingw32-make'
-*feito com as boas praticas de c++ e usando o padrão de biblioteca*
 
 ## Compilador
 Compilador padrao = clang++
@@ -24,3 +23,5 @@ mas eu não sei fazer isso, porque o comando é diferente no windows e no linux,
 ./Graphy -in=a.txt -out=b.txt
 
 ./Graphy -generate -vertex=100 -edgex=400 -out=a.txt
+
+**feito com as boas praticas de c++ e usando o padrão de biblioteca**
