@@ -24,4 +24,5 @@ mas eu não sei fazer isso, porque o comando é diferente no windows e no linux,
 
 ./Graphy -generate -vertex=100 -edgex=400 -out=a.txt
 
+## Obs:
 **feito com as boas praticas de c++ e usando o padrão de biblioteca**
