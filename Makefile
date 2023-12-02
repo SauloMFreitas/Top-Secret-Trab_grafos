@@ -18,7 +18,7 @@ else
 endif
 
 ifeq ($(CC),)
-	$(error "Couldn't find a C++ compiler)
+	$(error "Couldn't find a C++ compiler")
 endif
 
 all: setup $(EXEC)
