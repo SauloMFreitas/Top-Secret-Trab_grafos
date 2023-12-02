@@ -3,6 +3,7 @@
 #include <iostream>
 #include <set>
 #include <stack>
+#include <climits>
 
 using namespace Graphy;
 using namespace std;

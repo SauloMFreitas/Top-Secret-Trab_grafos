@@ -1,4 +1,4 @@
-/* #ifndef GRAPHY_MATRIX_H
+#ifndef GRAPHY_MATRIX_H
 #define GRAPHY_MATRIX_H
 
 #include "graph.hpp"
@@ -43,4 +43,3 @@ namespace Graphy {
     };
 }
 #endif // GRAPHY_MATRIX_H
- */

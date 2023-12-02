@@ -1,4 +1,4 @@
-/* #include "../include/matrix.hpp"
+#include "../include/matrix.hpp"
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
@@ -170,4 +170,3 @@ inline void Matrix::print() const {
 Graph *Matrix::arborescence(const string &vertexName) {
     return NULL;
 }
- */
