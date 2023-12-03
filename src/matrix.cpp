@@ -1,15 +1,16 @@
 #include "../include/matrix.hpp"
 #include <algorithm>
 #include <iomanip>
+#include <set>
 #include <iostream>
 #include <vector>
 
 using namespace Graphy;
 using namespace std;
 
-inline Matrix::Matrix() : Graph() {}
+Matrix::Matrix() : Graph() {}
 
-inline Matrix::Matrix(const uint &_size, const bool &_directed) : Graph(_size, _directed, false) {
+Matrix::Matrix(const uint &_size, const bool &_directed) : Graph(_size, _directed, false) {
     matrix = vector<vector<uint>>(_size, vector<uint>(_size, 0));
 
     for (uint i = 0; i < size; ++i) {
@@ -18,7 +19,7 @@ inline Matrix::Matrix(const uint &_size, const bool &_directed) : Graph(_size, _
     }
 }
 
-inline Matrix::Matrix(const uint &_size, const bool &_directed, const vector<string> &names) : Graph(_size, _directed, false) {
+Matrix::Matrix(const uint &_size, const bool &_directed, const vector<string> &names) : Graph(_size, _directed, false) {
     if (names.size() != _size) {
         throw invalid_argument("Number of names must match the size of the graph");
     }
@@ -65,8 +66,11 @@ inline bool Matrix::removeEdge(const string &from, const string &to) {
     return false;
 }
 
-void removeEdgesTo(const string &to) { return; }
-void removeEdgesFrom(const string &from) { return; }
+// TODO
+void Matrix::removeEdgesTo(const string &to) { return; }
+
+// TODO
+void Matrix::removeEdgesFrom(const string &from) { return; }
 
 // Vertex
 
@@ -130,6 +134,43 @@ inline bool Matrix::removeVertex(const string &vertexName) {
     return false;
 }
 
+bool Matrix::removeVertex(const vector<string> &vertexNames) {
+    bool b = true;
+    for(auto v: vertexNames) b &= removeVertex(v);
+    return b;
+}
+
+vector<string> Matrix::vertexNames() const {
+    vector<string> names;
+    for(const auto &pair : nameMap) names.push_back(pair.first);
+    return names;
+}
+
+// TODO
+bool Matrix::editEdge(const std::string &from, const std::string &to, const uint &weight) {
+    return false;
+}
+
+// TODO
+Graph* Matrix::clone() const {
+    return nullptr;
+}
+
+// TODO
+Graph* Matrix::reverse() {
+    return nullptr;
+}
+
+// TODO
+Graph* Matrix::minIncomingEdgeGraph() {
+    return nullptr;
+}
+
+// TODO
+Matrix* Matrix::transitiveClosure(const string &start) {
+    return nullptr;
+}
+
 inline void Matrix::print() const {
     vector<pair<uint, string>> value_name;
     value_name.reserve(size);
@@ -169,4 +210,20 @@ inline void Matrix::print() const {
 // Arborescence
 Graph *Matrix::arborescence(const string &vertexName) {
     return NULL;
+}
+
+/*
+ * =============================================================================
+ * =                                PRIVATE                                    =
+ * =============================================================================
+ */
+
+void Matrix::dfs(const string &vertex, set<string> &visited, int &count) {
+    uint index = nameMap[vertex];
+    visited.insert(vertex);
+    count++;
+
+    for(const auto &edge : this->matrix[index]) {
+
+    }
 }

@@ -3,14 +3,16 @@
 
 #include "graph.hpp"
 #include <map>
+#include <set>
 
 namespace Graphy {
-    class Matrix : public Graphy::Graph {
+    class Matrix : public Graph {
       private:
         std::map<std::string, uint> nameMap;
         std::vector<std::vector<uint>> matrix;
 
         bool _hasEdge(const std::string &from, const std::string &to);
+        void dfs(const std::string &vertex, std::set<std::string> &visited, int &count);
 
       public:
         Matrix();
@@ -32,14 +34,23 @@ namespace Graphy {
         bool removeVertex(const std::string &vertexName) override;
         bool removeVertex(const std::vector<std::string> &vertexNames) override;
 
+        bool editEdge(const std::string &from, const std::string &to, const uint &weight) override;
+        Graph *clone() const override;
+        Graph *reverse() override;
+        Graph *minIncomingEdgeGraph() override;
+
+        // Data
+        std::vector<std::string> vertexNames() const override;
+
         // Debug
         void print() const override;
 
         // Search
-        virtual Graph *transitiveClosure(const std::string &start) override;
+        virtual Matrix *transitiveClosure(const std::string &start) override;
 
         // Minimum spanning tree
         Graph *arborescence(const std::string &vertexName) override;
     };
 }
+
 #endif // GRAPHY_MATRIX_H

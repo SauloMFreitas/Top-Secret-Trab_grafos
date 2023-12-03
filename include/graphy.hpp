@@ -6,6 +6,6 @@
 
 // Implementações possiveis
 #include "adjList.hpp"
-// #include "matrix.hpp"
+#include "matrix.hpp"
 
 #endif // GRAPHY_H
